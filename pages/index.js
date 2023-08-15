@@ -1,5 +1,5 @@
-function Home(){
-    return <h1>Te Amo pituchinha ♥ - Feliz 9 meses de noivado! </h1>
+function Home(){ 
+    return <h1>Rumo ao Dia-5 </h1>
 }
 
 export default Home;
