@@ -1,12 +1,7 @@
-import database from "infra/database.js";
+import database from "infra/database";
 
 async function status(request, response) {
   const updatedAt = new Date().toISOString();
-
-  // const query =
-  //   "select max_conn, cast(used as int) used, res_for_super, cast(max_conn-used-res_for_super as int) res_for_normal, version from (select count(*) used from pg_stat_activity) t1,(select setting::int res_for_super from pg_settings where name=$$superuser_reserved_connections$$) t2,(select setting::int max_conn from pg_settings where name=$$max_connections$$) t3, (select setting::float as version from pg_settings where name ='server_version') t4;";
-  // const databaseInfo = await database.query(query);
-  // console.log(databaseInfo.rows);
 
   const databaseVersionResult = await database.query("SHOW server_version;");
   const databaseVersionValue = databaseVersionResult.rows[0].server_version;
@@ -30,7 +25,7 @@ async function status(request, response) {
     updated_at: updatedAt,
     dependencies: {
       database: {
-        postgres_version: parseFloat(databaseVersionValue),
+        postgres_version: databaseVersionValue,
         max_connections: parseInt(databaseMaxConnectionsValue),
         opened_connections: databaseOpenedConnectionsValue,
       },
